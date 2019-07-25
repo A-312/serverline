@@ -1,0 +1,42 @@
+{
+  "name": "serverline",
+  "version": "1.0.0",
+  "description": "Better prompt interface when a new line is added when input is active",
+  "keywords": [
+    "readline",
+    "line",
+    "output",
+    "input",
+    "prompt"
+  ],
+  "main": "bin/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test-ci": "mocha --reporter spec --check-leaks test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-312/serverline.git"
+  },
+  "files": [
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "author": "A-312",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/A-312/serverline/issues"
+  },
+  "homepage": "https://github.com/A-312/serverline#readme",
+  "devDependencies": {
+    "eslint": "5.16.0",
+    "eslint-config-standard": "12.0.0",
+    "eslint-plugin-import": "2.17.2",
+    "eslint-plugin-node": "8.0.1",
+    "eslint-plugin-promise": "4.1.1",
+    "eslint-plugin-standard": "4.0.0",
+    "mocha": "6.1.4"
+  }
+}
