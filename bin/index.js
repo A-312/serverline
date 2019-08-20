@@ -41,8 +41,15 @@ function Serverline() {
       myPrompt = strPrompt
       rl.setPrompt(myPrompt)
     },
-    on: function() {
-      myEmitter.on.apply(myEmitter, arguments)
+    on: function(eventName) {
+      switch (eventName) {
+        case 'line':
+        case 'SIGINT':
+        case 'completer':
+          return myEmitter.on.apply(myEmitter, arguments)
+      }
+
+      rl.on.apply(myEmitter, arguments)
     },
     getRL: function() {
       return rl
@@ -54,6 +61,9 @@ function Serverline() {
       rl.history = history
     },
     pause: function() {
+      rl.pause()
+    },
+    resume: function() {
       rl.pause()
     },
     close: function() {
@@ -96,10 +106,6 @@ function init(strPrompt) {
     }
     myEmitter.emit('line', line)
     rl.prompt()
-  })
-  rl.on('close', function() {
-    myEmitter.emit('close')
-    return process.exit(0)
   })
   rl.on('SIGINT', function() {
     fixSIGINTonQuestion = !!rl._questionCallback

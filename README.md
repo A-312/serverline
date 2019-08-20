@@ -15,7 +15,7 @@ Better prompt interface when a new line is added when input is active
 [travis-image]: https://img.shields.io/travis/com/A-312/serverline/master.svg?label=linux
 [travis-url]: https://travis-ci.com/A-312/serverline
 
-## Functionality :
+## Features :
 
 - Readline always available ;
 - Commands history ;
@@ -41,28 +41,28 @@ npm install serverline
 ### Example `/server/bin/index.js`:
 
 ```js
-process.stdout.write('\x1Bc')
+process.stdout.write("\x1Bc")
 
-const myRL = require('serverline')
+const myRL = require("serverline")
 
 myRL.init()
-myRL.setCompletion(['help', 'command1', 'command2', 'login', 'check', 'ping'])
+myRL.setCompletion(["help", "command1", "command2", "login", "check", "ping"])
 
-myRL.setPrompt('> ')
+myRL.setPrompt("> ")
 
-myRL.on('line', function(line) {
-  console.log('cmd:', line)
+myRL.on("line", function(line) {
+  console.log("cmd:", line)
   switch (line) {
-    case 'help'
-      console.log('help: To get this message.')
+    case "help":
+      console.log("help: To get this message.")
       break
-    case 'pwd'
-      console.log('toggle muted', !myRL.isMuted())
-      myRL.setMuted(!myRL.isMuted(), '> [hidden]')
+    case "pwd":
+      console.log("toggle muted", !myRL.isMuted())
+      myRL.setMuted(!myRL.isMuted(), "> [hidden]")
       return true
-    case 'help'
-      return myRL.secret('secret:', function() {
-        console.log(')')
+    case "secret":
+      return myRL.secret("secret:", function() {
+        console.log(")")
       })
   }
 
@@ -70,20 +70,19 @@ myRL.on('line', function(line) {
     myRL.setMuted(false)
 })
 
-myRL.on('SIGINT', function(rl) {
-  rl.question('Confirm exit: ', (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write('\x1B[1K> ')
+myRL.on("SIGINT", function(rl) {
+  rl.question("Confirm exit: ", (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write("\x1B[1K> "))
 })
 
-function main() {
+function displayFakeLog() {
   let i = 0
   setInterval(function() {
     const num = () => Math.floor(Math.random() * 255) + 1
     i++
-    console.log(i + ' ' + num() + '.' + num() + '.' + num() + ' user connected.')
+    console.log(i + " " + num() + "." + num() + "." + num() + " user connected.")
   }, 700)
 }
-
-main()
+displayFakeLog()
 ```
 
 ## Eval javascript command (like browser console) :
@@ -124,6 +123,8 @@ myRL.init()
 
 Display the query by writing it to the output, waits for user input to be provided on input and press `ENTER`, then invokes the callback function passing the provided input as the first argument.
 
+The input will be hidden with `[-=]` and `[=-]`.
+
 ```js
 myRL.init()
 
@@ -135,9 +136,27 @@ myRL.secret('secret:', function() {
 ```
 
 
+### Serverline.question(query, callback)
+
+ - `query` `String`: A statement or query to write to output, prepended to the prompt.
+ - `callback` `Function`: A callback function that is invoked with the user's input in response to the query.
+
+Display the query by writing it to the output, waits for user input to be provided on input and press `ENTER`, then invokes the callback function passing the provided input as the first argument.
+
+[Node doc](https://nodejs.org/api/readline.html#readline_rl_question_query_callback)
+
+```js
+myRL.init()
+
+myRL.question('What is your favorite food? ', (answer) => {
+  console.log(`Oh, so your favorite food is ${answer}`);
+});
+```
+
+
 ### Serverline.getPrompt()
 
-  - Returns `String`: Gets the current prompt that is wrote to output
+  - Returns `String`: Gets the current prompt that is written to output
 
 
 ### Serverline.setPrompt(strPrompt)
@@ -184,13 +203,6 @@ myRL.setCompletion(['help', 'command1', 'command2', 'login', 'check', 'ping'])
 ```
 
 
-### Serverline.getRL()
-
-   - Returns: The [readline instance](https://nodejs.org/api/readline.html#readline_readline)
-
-You can get more event with : `myRL.getRL().on(...)` but we recommand to use `myRL.on(...)`
-
-
 ### Serverline.getHistory()
 
    - Returns `Array[String]`: List of commands
@@ -222,22 +234,39 @@ Calling `.pause()` does not immediately pause other events (including `'line'`) 
 
 [Node doc](https://nodejs.org/api/readline.html#readline_rl_pause)
 
-  pause: function() {
-    rl.pause()
-  },
-    close: function() {
-      rl.close()
-    }
-  }
+
+### Serverline.resume()
+
+Resume the input stream if it has been paused.
+
+[Node doc](https://nodejs.org/api/readline.html#readline_rl_resume)
 
 
-### Serverline.on(eventName)
+### Serverline.getRL()
+
+   - Returns: The [readline instance](https://nodejs.org/api/readline.html#readline_readline)
+
+We recommand to use `Serverline.<function>()` function instead `Serverline.getRL().<function>()`.
+
+
+### Serverline.on(eventName, listener)
 
   - `eventName` (`String` \| `Symbol`): The name of the event
   - `listener` `Function`: The callback function
 
 Adds the listener function to the end of the listeners array for the event named eventName. No checks are made to see if the listener has already been added. Multiple calls passing the same combination of eventName and listener will result in the listener being added, and called, multiple times. [Read more](https://nodejs.org/api/events.html#events_emitter_on_eventname_listener)
 
+**Serverline/Rewrited events :**
+ - Event: 'line'
+ - Event: 'SIGINT'
+ - Event: 'completer'
+
+**Navtive Readline events :**
+ - Event: 'close'
+ - Event: 'pause'
+ - Event: 'resume'
+ - Event: 'SIGCONT'
+ - Event: 'SIGTSTP'
 
 #### Event: 'line'
 
@@ -257,41 +286,6 @@ myRL.on('line', function(line) {
   }
 })
 ```
-
-
-#### Event: 'line'
-
-The `'line'` event is emitted whenever the input stream receives an end-of-line input (`\n`, `\r`, or `\r\n`). This usually occurs when the user presses the `<Enter>`, or `<Return>` keys.
-
-The listener function is called with a string containing the single line of received input.
-
-```js
-myRL.init()
-
-myRL.setPrompt('> ')
-
-myRL.on('line', function(line) {
-  console.log('cmd:', line)
-  if (line == 'help') {
-    console.log('help: To get this message.')
-  }
-})
-```
-
-#### Event: 'close'
-
-The `'close'` event is emitted when one of the following occur:
-
- - The `rl.close()` method is called and the `readline.Interface` instance has relinquished control over the `input` and `output` streams;
- - The input stream receives its `'end'` event;
- - The input stream receives `<ctrl>-D` to signal end-of-transmission (EOT);
- - The input stream receives `<ctrl>-C` to signal `SIGINT` and there is no `'SIGINT'` event listener registered on the `readline.Interface` instance.
-
-The listener function is called without passing any arguments.
-
-The `readline.Interface` instance is finished once the `'close'` event is emitted.
-
-[Node doc](https://nodejs.org/api/readline.html#readline_event_close)
 
 
 #### Event: 'SIGINT'
@@ -301,10 +295,8 @@ The `'SIGINT'` event is emitted whenever the `input` stream receives a `<ctrl>-C
 The listener function is invoked without passing any arguments.
 
 ```js
-myRL.on('SIGINT', function(rl) {
-  rl.question('Confirm exit: ', function(answer) {
-    return (answer.match(/^o(ui)?$/i) || answer.match(/^y(es)?$/i)) ? process.exit(0) : rl.output.write('\x1B[1K> ')
-  })
+myRL.on("SIGINT", function(rl) {
+  rl.question("Confirm exit: ", (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write("\x1B[1K> "))
 })
 ```
 
@@ -320,12 +312,13 @@ myRL.on('SIGINT', function(rl) {
 You can make a better completer with dynamic values :
 
 ```js
-myRL.init()
+process.stdout.write("\x1Bc")
+const myRL = require("serverline")
 
+myRL.init()
 myRL.setPrompt('> ')
 
 myRL.setCompletion(['.backup', '.forceupdate', '.open', '.compare', '.rename', '.sandbox'])
-
 myRL.on('completer', function(arg) {
     if (arg.hits.length == 1) {
         arg.line = arg.hits[0]
@@ -374,3 +367,45 @@ Suggestion:
 Suggestion:
 .backup, .backup 1, .backup 2, .backup 3, .backup 4
 ```
+
+#### Event: 'close'
+
+[Node doc](https://nodejs.org/api/readline.html#readline_event_close)
+
+```js
+myRL.on('close', function(line) {
+  console.log('bye')
+})
+```
+
+#### Event: 'pause'
+
+[Node doc](https://nodejs.org/api/readline.html#readline_event_pause)
+
+```js
+myRL.on('pause', function(line) {
+  console.log('pause')
+})
+```
+
+#### Event: 'resume'
+
+[Node doc](https://nodejs.org/api/readline.html#readline_event_resume)
+
+```js
+myRL.on('resume', function(line) {
+  console.log('resume')
+})
+```
+
+#### Event: 'SIGCONT'
+
+The `'SIGCONT'` event is not supported on Windows.
+
+[Node doc](https://nodejs.org/api/readline.html#readline_event_SIGCONT)
+
+#### Event: 'SIGTSTP'
+
+The `'SIGTSTP'` event is not supported on Windows.
+
+[Node doc](https://nodejs.org/api/readline.html#readline_event_SIGCONT)
