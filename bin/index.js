@@ -1,8 +1,10 @@
 /*
- * nodeReadline v0.1.1
- * https://github.com/GuimDev/nodeReadline
- * Tested on: node v0.9.5
+ * Tested on: node v10
  */
+
+if (process.version.match(/v(\d+)\.(\d+).(\d+)/)[1] < 10) {
+  throw new Error('serverline require node >= 10')
+}
 
 const EventEmitter = require('events')
 const readline = require('readline')
@@ -28,18 +30,18 @@ function Serverline() {
     setCompletion: function(obj) {
       completions = (typeof obj === 'object') ? obj : completions
     },
-    setMuted: function(bool, msg) {
-      stdoutMuted = !!bool
+    setMuted: function(enabled, msg) {
+      stdoutMuted = !!enabled
 
       const message = (msg && typeof msg === 'string') ? msg : '> [hidden]'
       rl.setPrompt((!stdoutMuted) ? myPrompt : message)
       return stdoutMuted
     },
-    setPrompt: function(str) {
-      myPrompt = str
+    setPrompt: function(strPrompt) {
+      myPrompt = strPrompt
       rl.setPrompt(myPrompt)
     },
-    on: function(line) {
+    on: function() {
       myEmitter.on.apply(myEmitter, arguments)
     },
     getRL: function() {
@@ -53,6 +55,9 @@ function Serverline() {
     },
     pause: function() {
       rl.pause()
+    },
+    close: function() {
+      rl.close()
     }
   }
 }
@@ -94,13 +99,13 @@ function init(strPrompt) {
   })
   rl.on('close', function() {
     myEmitter.emit('close')
-    return process.exit(1)
+    return process.exit(0)
   })
   rl.on('SIGINT', function() {
     fixSIGINTonQuestion = !!rl._questionCallback
     rl.line = ''
     if (!myEmitter.emit('SIGINT', rl)) {
-      process.exit(1)
+      process.exit(0)
     }
   })
   rl.prompt()
