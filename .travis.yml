@@ -1,10 +1,9 @@
 language: node_js
 node_js:
-  - "6.16"
-  - "7.10"
-  - "8.15"
-  - "9.11"
-  - "10.16"
+  - 10.0.0
+  - 10.16.3
+  - 12.8.1
+  - lts/*
 matrix:
   fast_finish: true
 sudo: false
