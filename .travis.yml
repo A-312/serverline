@@ -3,7 +3,6 @@ node_js:
   - 10.0.0
   - 10.16.3
   - 12.8.1
-  - lts/*
 matrix:
   fast_finish: true
 sudo: false

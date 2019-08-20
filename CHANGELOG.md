@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
+## [1.3.0] - 2019-08-20
+### Changed
+
+ - Improve README.md #5
+
+### Added
+
+ - Add `_debugModuleSupport(require('debug'))` function for debug module #5
+
 ## [1.2.0] - 2019-08-20
 ### Changed
 
