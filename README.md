@@ -18,15 +18,23 @@ Better prompt interface when a new line is added when input is active
 ## Features :
 
 - Readline always available ;
+- Support for [debug](https://www.npmjs.com/package/debug) module with `myRL._debugModuleSupport(require('debug'))` ;
 - Commands history ;
 - Autocompletition ;
 - No split between input & output ;
 - Password mode to hide input (try 'pwd' command), [more effect here](https://stackoverflow.com/a/24037546/2226755) ;
 - You can eval command or javascript function like browser.
 
-[![gif example][1]][1]
+### Screenshot :
 
-  [1]: https://i.stack.imgur.com/Xi24D.gif
+[![demo with debug][1]][1]
+
+  [1]: https://i.imgur.com/5AMGsb9.gif
+
+#### See more :
+
+ - [Demo with `console.log`](https://i.imgur.com/C7OQj5Y.gif)
+
 
 ## Quick start
 
@@ -41,28 +49,28 @@ npm install serverline
 ### Example `/server/bin/index.js`:
 
 ```js
-process.stdout.write("\x1Bc")
+process.stdout.write('\x1Bc')
 
-const myRL = require("serverline")
+const myRL = require('serverline')
 
 myRL.init()
-myRL.setCompletion(["help", "command1", "command2", "login", "check", "ping"])
+myRL.setCompletion(['help', 'command1', 'command2', 'login', 'check', 'ping'])
 
-myRL.setPrompt("> ")
+myRL.setPrompt('> ')
 
-myRL.on("line", function(line) {
-  console.log("cmd:", line)
+myRL.on('line', function(line) {
+  console.log('cmd:', line)
   switch (line) {
-    case "help":
-      console.log("help: To get this message.")
+    case 'help':
+      console.log('help: To get this message.')
       break
-    case "pwd":
-      console.log("toggle muted", !myRL.isMuted())
-      myRL.setMuted(!myRL.isMuted(), "> [hidden]")
+    case 'pwd':
+      console.log('toggle muted', !myRL.isMuted())
+      myRL.setMuted(!myRL.isMuted(), '> [hidden]')
       return true
-    case "secret":
-      return myRL.secret("secret:", function() {
-        console.log(")")
+    case 'secret':
+      return myRL.secret('secret:', function() {
+        console.log(';)')
       })
   }
 
@@ -70,8 +78,8 @@ myRL.on("line", function(line) {
     myRL.setMuted(false)
 })
 
-myRL.on("SIGINT", function(rl) {
-  rl.question("Confirm exit: ", (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write("\x1B[1K> "))
+myRL.on('SIGINT', function(rl) {
+  rl.question('Confirm exit: ', (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write('\x1B[1K> '))
 })
 
 function displayFakeLog() {
@@ -79,7 +87,7 @@ function displayFakeLog() {
   setInterval(function() {
     const num = () => Math.floor(Math.random() * 255) + 1
     i++
-    console.log(i + " " + num() + "." + num() + "." + num() + " user connected.")
+    console.log(i + ' ' + num() + '.' + num() + '.' + num() + ' user connected.')
   }, 700)
 }
 displayFakeLog()
@@ -100,6 +108,34 @@ myRL.on('line', function(line) {
 ## Looking for old support ?
 
 [See node > 9.5](https://stackoverflow.com/a/24519813/2226755) and [oldest version](https://stackoverflow.com/revisions/24519813/3)
+
+## Support for external module
+
+### debug
+
+```js
+process.env.DEBUG = '*'
+const debug = require('debug')('server::info')
+
+const myRL = require('serverline')
+
+myRL.init()
+myRL._debugModuleSupport(require('debug'))
+
+myRL.setPrompt('> ')
+
+
+function displayFakeLog() {
+  let i = 0
+  setInterval(function() {
+    const num = () => Math.floor(Math.random() * 255) + 1
+    i++
+    debug(i + ' ' + num() + '.' + num() + '.' + num() + ' user connected.')
+  }, 700)
+}
+
+displayFakeLog()
+```
 
 ## API
 
@@ -295,8 +331,8 @@ The `'SIGINT'` event is emitted whenever the `input` stream receives a `<ctrl>-C
 The listener function is invoked without passing any arguments.
 
 ```js
-myRL.on("SIGINT", function(rl) {
-  rl.question("Confirm exit: ", (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write("\x1B[1K> "))
+myRL.on('SIGINT', function(rl) {
+  rl.question('Confirm exit: ', (answer) => answer.match(/^y(es)?$/i) ? process.exit(0) : rl.output.write('\x1B[1K> '))
 })
 ```
 
@@ -312,8 +348,8 @@ myRL.on("SIGINT", function(rl) {
 You can make a better completer with dynamic values :
 
 ```js
-process.stdout.write("\x1Bc")
-const myRL = require("serverline")
+process.stdout.write('\x1Bc')
+const myRL = require('serverline')
 
 myRL.init()
 myRL.setPrompt('> ')

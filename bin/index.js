@@ -9,6 +9,7 @@ if (process.version.match(/v(\d+)\.(\d+).(\d+)/)[1] < 10) {
 const EventEmitter = require('events')
 const readline = require('readline')
 const stream = require('stream')
+const util = require('util')
 
 const myEmitter = new EventEmitter()
 
@@ -16,6 +17,11 @@ let rl = null
 let stdoutMuted = false
 let myPrompt = '> '
 let completions = []
+
+const collection = {
+  stdout: new stream.Writable(),
+  stderr: new stream.Writable()
+}
 
 function Serverline() {
   return {
@@ -68,6 +74,11 @@ function Serverline() {
     },
     close: function() {
       rl.close()
+    },
+    _debugModuleSupport: function(debug) {
+      debug.log = function log() {
+        console.log(util.format.apply(util, arguments).toString())
+      }
     }
   }
 }
@@ -140,7 +151,6 @@ function secret(query, callback) {
   })
 }
 
-
 function hiddenOverwrite() {
   rl._refreshLine = (function(refresh) {
     // https://github.com/nodejs/node/blob/v9.5.0/lib/readline.js#L335
@@ -179,14 +189,7 @@ function consoleOverwrite() {
     stderr: process.stderr
   }
 
-  const collection = {
-    stdout: new stream.Writable(),
-    stderr: new stream.Writable()
-  }
-
   Object.keys(collection).forEach((name) => {
-    process[name] = collection[name]
-
     collection[name]._write = function(chunk, encoding, callback) {
       original[name].write(beforeTheLastLine(chunk), encoding, () => {
         rl._refreshLine()
@@ -216,7 +219,7 @@ function completer(line) {
   if (hits.length === 1) {
     return [hits, line]
   } else {
-    console.log('\x1B[96mSuggestion:\x1B[00m')
+    console.log('\x1B[96mSuggest:\x1B[00m')
 
     let list = ''
     let l = 0

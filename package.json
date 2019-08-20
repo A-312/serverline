@@ -1,6 +1,6 @@
 {
   "name": "serverline",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Better prompt interface when a new line is added when input is active",
   "keywords": [
     "readline",
@@ -15,8 +15,8 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "mocha --reporter spec --check-leaks test/"
   },
-  "engines" : {
-    "node" : ">=10.0.0"
+  "engines": {
+    "node": ">=10.0.0"
   },
   "repository": {
     "type": "git",
