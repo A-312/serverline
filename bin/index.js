@@ -92,8 +92,8 @@ function beforeTheLastLine(chunk) {
 
   let text = ''
   text += '\n\r\x1B[' + nbline + 'A\x1B[0J'
-  text += chunk.toString() + '\r'
-  text += Array(nbline).join('\r\x1B[1E')
+  text += chunk.toString()
+  text += Array(nbline).join('\n')
 
   return Buffer.from(text, 'utf8')
 }
