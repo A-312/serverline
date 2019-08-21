@@ -92,7 +92,7 @@ module.exports = new Serverline()
 let fixSIGINTonQuestion = false
 
 function beforeTheLastLine(chunk) {
-  const nbline = Math.ceil((rl.line.length + 3) / rl.columns)
+  const nbline = Math.ceil((rl.line.length + rl._prompt.length + 1) / rl.columns)
 
   let text = ''
   text += '\n\r\x1B[' + nbline + 'A\x1B[0J'
