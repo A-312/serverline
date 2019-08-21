@@ -110,7 +110,8 @@ function init(options) {
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    completer: completer
+    completer: completer,
+    prompt: slOptions.prompt
   })
 
   const consoleOptions = {}
@@ -124,7 +125,6 @@ function init(options) {
   consoleOverwrite(consoleOptions)
   hiddenOverwrite()
 
-  rl.setPrompt(slOptions.prompt)
   rl.on('line', function(line) {
     if (!stdoutMuted) {
       rl.history.push(line)

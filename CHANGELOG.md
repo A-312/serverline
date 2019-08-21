@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
  - `serverline.init()` can accept an object `options`.
+ - Code review (#12)
 
 ### Added
 
