@@ -111,6 +111,11 @@ function init(options) {
     prompt: '> '
   }, options)
 
+  if (slOptions.forceTerminalContext) {
+    process.stdin.isTTY = true
+    process.stdout.isTTY = true
+  }
+
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -121,6 +126,7 @@ function init(options) {
   if (!rl.terminal) {
     console.warn('WARN: Compatibility mode! The current context is not a terminal. This may ' +
       'occur when you redirect terminal output into a file.')
+    console.warn('You can try to define `options.forceTerminalContext = true`.')
   }
 
   const consoleOptions = {}
