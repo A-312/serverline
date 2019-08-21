@@ -113,7 +113,15 @@ function init(options) {
     completer: completer
   })
 
-  consoleOverwrite()
+  const consoleOptions = {}
+
+  ;(['colorMode', 'inspectOptions']).forEach((val) => {
+    if (slOptions[val]) {
+      consoleOptions[val] = slOptions[val]
+    }
+  })
+
+  consoleOverwrite(consoleOptions)
   hiddenOverwrite()
 
   rl.setPrompt(slOptions.prompt)
@@ -189,7 +197,7 @@ function hiddenOverwrite() {
   })(rl._writeToOutput)
 }
 
-function consoleOverwrite() {
+function consoleOverwrite(options) {
   const original = {
     stdout: process.stdout,
     stderr: process.stderr
@@ -205,7 +213,11 @@ function consoleOverwrite() {
   })
 
   const Console = console.Console
-  console = new Console(collection.stdout, collection.stderr) // eslint-disable-line no-global-assign
+  const consoleOptions = Object.assign({}, {
+    stdout: collection.stdout,
+    stderr: collection.stderr
+  }, options)
+  console = new Console(consoleOptions) // eslint-disable-line no-global-assign
   console.Console = Console
 }
 
