@@ -139,9 +139,16 @@ displayFakeLog()
 
 ## API
 
-### Serverline.init(strPrompt)
+### Serverline.init(options)
 
-  - `strPrompt` (`String`, default: `'> '`): Sets the prompt that will be written to output
+  - `options` (`Object` \| `String` if is String the value will be set to `options.prompt`):
+      - `prompt` (`String`, default: `'> '`): Set the prompt that will be written to output.
+      - `colorMode` (`Boolean` \| `String`, default: `'auto'`): Set color support for the `Console` instance,
+        enable color with `true` [Read more](console_new_console_options).
+      - `inspectOptions` `Object`: Specifies options that are passed along to [util.inspect()](util_util_inspect_object_options).
+
+[console_new_console_options]: https://nodejs.org/api/console.html#console_new_console_options
+[util_util_inspect_object_options]: https://nodejs.org/api/util.html#util_util_inspect_object_options
 
 Start serverline's readline.
 
@@ -311,9 +318,9 @@ The `'line'` event is emitted whenever the input stream receives an end-of-line 
 The listener function is called with a string containing the single line of received input.
 
 ```js
-myRL.init()
-
-myRL.setPrompt('> ')
+myRL.init({
+  prompt: '> '
+})
 
 myRL.on('line', function(line) {
   console.log('cmd:', line)
@@ -351,8 +358,9 @@ You can make a better completer with dynamic values :
 process.stdout.write('\x1Bc')
 const myRL = require('serverline')
 
-myRL.init()
-myRL.setPrompt('> ')
+myRL.init({
+  prompt: '> '
+})
 
 myRL.setCompletion(['.backup', '.forceupdate', '.open', '.compare', '.rename', '.sandbox'])
 myRL.on('completer', function(arg) {

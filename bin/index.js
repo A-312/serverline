@@ -98,8 +98,14 @@ function beforeTheLastLine(chunk) {
   return Buffer.from(text, 'utf8')
 }
 
-function init(strPrompt) {
-  myPrompt = strPrompt || '> '
+function init(options) {
+  if (typeof options === 'string') {
+    options = { prompt: options } // eslint-disable-line no-param-reassign
+  }
+
+  const slOptions = Object.assign({}, {
+    prompt: '> '
+  }, options)
 
   rl = readline.createInterface({
     input: process.stdin,
@@ -107,10 +113,18 @@ function init(strPrompt) {
     completer: completer
   })
 
-  consoleOverwrite()
+  const consoleOptions = {}
+
+  ;(['colorMode', 'inspectOptions']).forEach((val) => {
+    if (slOptions[val]) {
+      consoleOptions[val] = slOptions[val]
+    }
+  })
+
+  consoleOverwrite(consoleOptions)
   hiddenOverwrite()
 
-  rl.setPrompt(myPrompt)
+  rl.setPrompt(slOptions.prompt)
   rl.on('line', function(line) {
     if (!stdoutMuted) {
       rl.history.push(line)
@@ -183,7 +197,7 @@ function hiddenOverwrite() {
   })(rl._writeToOutput)
 }
 
-function consoleOverwrite() {
+function consoleOverwrite(options) {
   const original = {
     stdout: process.stdout,
     stderr: process.stderr
@@ -199,7 +213,11 @@ function consoleOverwrite() {
   })
 
   const Console = console.Console
-  console = new Console(collection.stdout, collection.stderr) // eslint-disable-line no-global-assign
+  const consoleOptions = Object.assign({}, {
+    stdout: collection.stdout,
+    stderr: collection.stderr
+  }, options)
+  console = new Console(consoleOptions) // eslint-disable-line no-global-assign
   console.Console = Console
 }
 
