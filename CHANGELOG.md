@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 
- - `serverline.init()` can accept an object `options`.
- - Code review (#12)
+ - `serverline.init()` can accept an object `options`. #11
+ - Code review (#12).
 
 ### Added
 
- - Add `colorMode` and `inspectOptions` properties to options in `serverline.init(options)`.
+ - Add `colorMode` and `inspectOptions` properties to options in `serverline.init(options)`. #11
 
 
 ## [1.3.1] - 2019-08-20
