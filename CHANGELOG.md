@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.3.1] - 2019-08-20
 ### Fixed
 
- - Add `_debugModuleSupport(require('debug'))` function for debug module #6
+ - Fix Escape Code : bug was appeared when the last console.log had several lines and prompt was on the bottom of the screen #6
 
 
 ## [1.3.0] - 2019-08-20
