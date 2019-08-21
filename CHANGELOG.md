@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
  - Fix error in Serverline Streams when `rl.history` are not defined. #13
  - Fix error when output is redirect (with `npm start > file.txt`, `npm start | tee file.txt`, child_process, ...). #13
+ - Fix display error when prompt.length != 2 and multiline prompt #16
 
 
 ## [1.3.1] - 2019-08-20
