@@ -117,7 +117,7 @@ function init(options) {
   const consoleOptions = {}
 
   ;(['colorMode', 'inspectOptions', 'ignoreErrors']).forEach((val) => {
-    if (slOptions[val]) {
+    if (typeof slOptions[val] !== 'undefined') {
       consoleOptions[val] = slOptions[val]
     }
   })
