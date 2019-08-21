@@ -167,7 +167,7 @@ function secret(query, callback) {
 
 function hiddenOverwrite() {
   rl._refreshLine = (function(refresh) {
-    // https://github.com/nodejs/node/blob/v9.5.0/lib/readline.js#L335
+    // https://github.com/nodejs/node/blob/v10.0.0/lib/readline.js#L326 && ./v9.5.0/lib/readline.js#L335
     return function _refreshLine() {
       let abc
       if (stdoutMuted) {
@@ -184,7 +184,7 @@ function hiddenOverwrite() {
   })(rl._refreshLine)
 
   rl._writeToOutput = (function(write) {
-    // https://github.com/nodejs/node/blob/v9.5.0/lib/readline.js#L442
+    // https://github.com/nodejs/node/blob/v10.0.0/lib/readline.js#L289 && ./v9.5.0/lib/readline.js#L442
     return function _writeToOutput(argStringToWrite) {
       let stringToWrite = argStringToWrite
 
