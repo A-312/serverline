@@ -126,7 +126,7 @@ function init(options) {
   hiddenOverwrite()
 
   rl.on('line', function(line) {
-    if (!stdoutMuted) {
+    if (!stdoutMuted && rl.history) {
       rl.history.push(line)
     }
     myEmitter.emit('line', line)

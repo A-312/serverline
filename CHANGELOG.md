@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  - Add `colorMode` and `inspectOptions` properties in options for `serverline.init(options)`. #11
  - Add `ignoreErrors` property in options for `serverline.init(options)`. #13
 
+### Fixed
+
+ - Fix error in Serverline Streams when `rl.history` are not defined.
+
 
 ## [1.3.1] - 2019-08-20
 ### Fixed
