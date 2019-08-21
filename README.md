@@ -141,7 +141,8 @@ displayFakeLog()
 
 ### Serverline.init(strPrompt)
 
-  - `strPrompt` (`String`, default: `'> '`): Sets the prompt that will be written to output
+  - `options` (`Object` \| `String` if is String the value will be set to `options.prompt`):
+      - `prompt` (`String`, default: `'> '`): Set the prompt that will be written to output.
 
 Start serverline's readline.
 

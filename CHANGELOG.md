@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+### Changed
+
+ - `serverline.init()` can accept an object `options`.
 
 
 
@@ -14,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
  - Add `_debugModuleSupport(require('debug'))` function for debug module #6
+
 
 ## [1.3.0] - 2019-08-20
 ### Changed
@@ -23,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
  - Add `_debugModuleSupport(require('debug'))` function for debug module #5
+
 
 ## [1.2.0] - 2019-08-20
 ### Changed

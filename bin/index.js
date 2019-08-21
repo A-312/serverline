@@ -98,8 +98,14 @@ function beforeTheLastLine(chunk) {
   return Buffer.from(text, 'utf8')
 }
 
-function init(strPrompt) {
-  myPrompt = strPrompt || '> '
+function init(options) {
+  if (typeof options === 'string') {
+    options = { prompt: options } // eslint-disable-line no-param-reassign
+  }
+
+  const slOptions = Object.assign({}, {
+    prompt: '> '
+  }, options)
 
   rl = readline.createInterface({
     input: process.stdin,
@@ -110,7 +116,7 @@ function init(strPrompt) {
   consoleOverwrite()
   hiddenOverwrite()
 
-  rl.setPrompt(myPrompt)
+  rl.setPrompt(slOptions.prompt)
   rl.on('line', function(line) {
     if (!stdoutMuted) {
       rl.history.push(line)
