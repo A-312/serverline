@@ -61,10 +61,14 @@ function Serverline() {
       return rl
     },
     getHistory: function() {
-      return rl.history
+      return (rl.terminal) ? rl.history : []
     },
     setHistory: function(history) {
-      rl.history = history
+      if (rl.terminal && Array.isArray(history)) {
+        rl.history = history
+        return true
+      }
+      return !!rl.terminal
     },
     pause: function() {
       rl.pause()
@@ -107,6 +111,11 @@ function init(options) {
     prompt: '> '
   }, options)
 
+  if (slOptions.forceTerminalContext) {
+    process.stdin.isTTY = true
+    process.stdout.isTTY = true
+  }
+
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -114,10 +123,16 @@ function init(options) {
     prompt: slOptions.prompt
   })
 
+  if (!rl.terminal) {
+    console.warn('WARN: Compatibility mode! The current context is not a terminal. This may ' +
+      'occur when you redirect terminal output into a file.')
+    console.warn('You can try to define `options.forceTerminalContext = true`.')
+  }
+
   const consoleOptions = {}
 
-  ;(['colorMode', 'inspectOptions']).forEach((val) => {
-    if (slOptions[val]) {
+  ;(['colorMode', 'inspectOptions', 'ignoreErrors']).forEach((val) => {
+    if (typeof slOptions[val] !== 'undefined') {
       consoleOptions[val] = slOptions[val]
     }
   })
@@ -126,15 +141,19 @@ function init(options) {
   hiddenOverwrite()
 
   rl.on('line', function(line) {
-    if (!stdoutMuted) {
+    if (!stdoutMuted && rl.history && rl.terminal) {
       rl.history.push(line)
     }
     myEmitter.emit('line', line)
-    rl.prompt()
+    if (rl.terminal) {
+      rl.prompt()
+    }
   })
   rl.on('SIGINT', function() {
     fixSIGINTonQuestion = !!rl._questionCallback
-    rl.line = ''
+    if (rl.terminal) {
+      rl.line = ''
+    }
     if (!myEmitter.emit('SIGINT', rl)) {
       process.exit(0)
     }
@@ -155,7 +174,9 @@ function secret(query, callback) {
   const toggleAfterAnswer = !stdoutMuted
   stdoutMuted = true
   rl.question(query, function(value) {
-    rl.history = rl.history.slice(1)
+    if (rl.terminal) {
+      rl.history = rl.history.slice(1)
+    }
 
     if (toggleAfterAnswer) {
       stdoutMuted = false
@@ -167,29 +188,33 @@ function secret(query, callback) {
 
 function hiddenOverwrite() {
   rl._refreshLine = (function(refresh) {
-    // https://github.com/nodejs/node/blob/v9.5.0/lib/readline.js#L335
+    // https://github.com/nodejs/node/blob/v10.0.0/lib/readline.js#L326 && ./v9.5.0/lib/readline.js#L335
     return function _refreshLine() {
       let abc
-      if (stdoutMuted) {
+      if (stdoutMuted && rl.line) {
         abc = rl.line
         rl.line = ''
       }
 
       refresh.call(rl)
 
-      if (stdoutMuted) {
+      if (stdoutMuted && rl.line) {
         rl.line = abc
       }
     }
   })(rl._refreshLine)
 
   rl._writeToOutput = (function(write) {
-    // https://github.com/nodejs/node/blob/v9.5.0/lib/readline.js#L442
+    // https://github.com/nodejs/node/blob/v10.0.0/lib/readline.js#L289 && ./v9.5.0/lib/readline.js#L442
     return function _writeToOutput(argStringToWrite) {
       let stringToWrite = argStringToWrite
 
-      if (stdoutMuted) {
+      if (!stdoutMuted) {
+        stringToWrite = argStringToWrite
+      } else if (rl.terminal) { // muted && terminal
         stringToWrite = '\x1B[2K\x1B[200D' + rl._prompt + '[' + ((rl.line.length % 2 === 1) ? '=-' : '-=') + ']'
+      } else { // muted && terminal == false
+        stringToWrite = ''
       }
 
       write.call(rl, stringToWrite)
@@ -205,10 +230,15 @@ function consoleOverwrite(options) {
 
   Object.keys(collection).forEach((name) => {
     collection[name]._write = function(chunk, encoding, callback) {
-      original[name].write(beforeTheLastLine(chunk), encoding, () => {
-        rl._refreshLine()
-        callback()
-      })
+      // https://github.com/nodejs/node/blob/v10.0.0/lib/readline.js#L178
+      if (rl.terminal) {
+        original[name].write(beforeTheLastLine(chunk), encoding, () => {
+          rl._refreshLine()
+          callback()
+        })
+      } else {
+        original[name].write(chunk, encoding, callback)
+      }
     }
   })
 

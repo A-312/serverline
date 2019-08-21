@@ -143,9 +143,13 @@ displayFakeLog()
 
   - `options` (`Object` \| `String` if is String the value will be set to `options.prompt`):
       - `prompt` (`String`, default: `'> '`): Set the prompt that will be written to output.
+      - `ignoreErrors` (`Boolean`, default: `true`): Ignore errors when writing to the underlying streams.
+        By default `Console` instance is on silent mode, it will catch error without print anything (**in dev mode, set to `false`**). 
       - `colorMode` (`Boolean` \| `String`, default: `'auto'`): Set color support for the `Console` instance,
         enable color with `true` [Read more](console_new_console_options).
       - `inspectOptions` `Object`: Specifies options that are passed along to [util.inspect()](util_util_inspect_object_options).
+      - `forceTerminalContext` (`Boolean`, default: `false`): Force node to use stdin like a real terminal.
+        This setting is usefull if you redirect the output (with `npm start > file.txt`, `npm start | tee file.txt`, child_process, ...).
 
 [console_new_console_options]: https://nodejs.org/api/console.html#console_new_console_options
 [util_util_inspect_object_options]: https://nodejs.org/api/util.html#util_util_inspect_object_options

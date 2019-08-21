@@ -10,11 +10,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
  - `serverline.init()` can accept an object `options`. #11
- - Code review (#12).
+ - Code review (#12, #13).
 
 ### Added
 
- - Add `colorMode` and `inspectOptions` properties to options in `serverline.init(options)`. #11
+ - Add `colorMode` and `inspectOptions` properties in options for `serverline.init(options)`. #11
+ - Add `ignoreErrors`, `forceTerminalContext` properties in options for `serverline.init(options)`. #13
+
+### Fixed
+
+ - Fix error in Serverline Streams when `rl.history` are not defined. #13
+ - Fix error when output is redirect (with `npm start > file.txt`, `npm start | tee file.txt`, child_process, ...). #13
 
 
 ## [1.3.1] - 2019-08-20
