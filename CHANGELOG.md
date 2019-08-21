@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
- - Add `colorMode` and `inspectOptions` properties to options in `serverline.init(options)`. #11
+ - Add `colorMode` and `inspectOptions` properties in options for `serverline.init(options)`. #11
 
 
 ## [1.3.1] - 2019-08-20
