@@ -70,11 +70,14 @@ function Serverline() {
       }
       return !!rl.terminal
     },
+    question: function() {
+      rl.apply(rl, arguments)
+    },
     pause: function() {
       rl.pause()
     },
     resume: function() {
-      rl.pause()
+      rl.resume()
     },
     close: function() {
       rl.close()

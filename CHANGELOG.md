@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
+## [1.4.1] - 2019-08-28
+### Fixed
+
+ - `serverline.resume()` called `rl.pause()` instead of `rl.resume()` #23
+ - `serverline.question()` was missing #23
+
+
 ## [1.4.0] - 2019-08-22
 ### Changed
 

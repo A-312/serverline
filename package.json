@@ -1,6 +1,6 @@
 {
   "name": "serverline",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Better prompt interface when a new line is added when input is active",
   "keywords": [
     "readline",
