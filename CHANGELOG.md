@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.4.2] - 2019-08-28
+### Fixed
+
+ - `serverline.question()` doesn't work #24
+
 
 ## [1.4.1] - 2019-08-28
 ### Fixed

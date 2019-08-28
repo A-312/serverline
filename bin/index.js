@@ -71,7 +71,7 @@ function Serverline() {
       return !!rl.terminal
     },
     question: function() {
-      rl.apply(rl, arguments)
+      rl.question.apply(rl, arguments)
     },
     pause: function() {
       rl.pause()
