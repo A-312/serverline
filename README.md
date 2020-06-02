@@ -196,8 +196,8 @@ Display the query by writing it to the output, waits for user input to be provid
 myRL.init()
 
 myRL.question('What is your favorite food? ', (answer) => {
-  console.log(`Oh, so your favorite food is ${answer}`);
-});
+  console.log(`Oh, so your favorite food is ${answer}.`)
+})
 ```
 
 
@@ -216,7 +216,7 @@ myRL.question('What is your favorite food? ', (answer) => {
   - Returns `Boolean`: True if the input is hidden
 
 
-### setMuted(enabled, strPrompt)
+### Serverline.setMuted(enabled, strPrompt)
 
   - `enabled` `Boolean`: Enable/Disable
   - `strPrompt` `String`: Sets the prompt that will be written to output
@@ -257,7 +257,7 @@ myRL.setCompletion(['help', 'command1', 'command2', 'login', 'check', 'ping'])
 Get History.
 
 
-### Serverline.getHistory()
+### Serverline.setHistory(history)
 
    - Returns `Array[String]`: List of commands
 
@@ -269,6 +269,13 @@ Rewrite history.
    - Returns: An Object with `stdout` and `stderr` used by serverline.
 
 Use `Serverline.getCollection().stdout.write('msg\n')` can be usefull if you don't want to use `console.log('msg')`. `Serverline.getCollection().stdout` is different of `process.stdout`. Prefere to use `Serverline.getCollection().stdout.write('msg\n')` instead `process.stdout.write('msg\n')` because if you use `process.stdout.write`, you will get some prompt displays bugs.
+
+
+### Serverline.getRL()
+
+   - Returns: The [readline instance](https://nodejs.org/api/readline.html#readline_readline)
+
+We recommand to use `Serverline.<function>()` function instead `Serverline.getRL().<function>()`.
 
 
 ### Serverline.close()
@@ -294,13 +301,6 @@ Calling `.pause()` does not immediately pause other events (including `'line'`) 
 Resume the input stream if it has been paused.
 
 [Node doc](https://nodejs.org/api/readline.html#readline_rl_resume)
-
-
-### Serverline.getRL()
-
-   - Returns: The [readline instance](https://nodejs.org/api/readline.html#readline_readline)
-
-We recommand to use `Serverline.<function>()` function instead `Serverline.getRL().<function>()`.
 
 
 ### Serverline.on(eventName, listener)

@@ -27,14 +27,18 @@ function Serverline() {
   return {
     init: init,
     secret: secret,
+    question: function() {
+      rl.question.apply(rl, arguments)
+    },
     getPrompt: function() {
       return myPrompt
     },
+    setPrompt: function(strPrompt) {
+      myPrompt = strPrompt
+      rl.setPrompt(myPrompt)
+    },
     isMuted: function() {
       return stdoutMuted
-    },
-    setCompletion: function(obj) {
-      completions = (typeof obj === 'object') ? obj : completions
     },
     setMuted: function(enabled, msg) {
       stdoutMuted = !!enabled
@@ -43,22 +47,8 @@ function Serverline() {
       rl.setPrompt((!stdoutMuted) ? myPrompt : message)
       return stdoutMuted
     },
-    setPrompt: function(strPrompt) {
-      myPrompt = strPrompt
-      rl.setPrompt(myPrompt)
-    },
-    on: function(eventName) {
-      switch (eventName) {
-        case 'line':
-        case 'SIGINT':
-        case 'completer':
-          return myEmitter.on.apply(myEmitter, arguments)
-      }
-
-      rl.on.apply(myEmitter, arguments)
-    },
-    getRL: function() {
-      return rl
+    setCompletion: function(obj) {
+      completions = (typeof obj === 'object') ? obj : completions
     },
     getHistory: function() {
       return (rl.terminal) ? rl.history : []
@@ -70,14 +60,17 @@ function Serverline() {
       }
       return !!rl.terminal
     },
-    question: function() {
-      rl.question.apply(rl, arguments)
-    },
     getCollection: function() {
       return {
         stdout: collection.stdout,
         stderr: collection.stderr
       }
+    },
+    getRL: function() {
+      return rl
+    },
+    close: function() {
+      rl.close()
     },
     pause: function() {
       rl.pause()
@@ -85,8 +78,15 @@ function Serverline() {
     resume: function() {
       rl.resume()
     },
-    close: function() {
-      rl.close()
+    on: function(eventName) {
+      switch (eventName) {
+        case 'line':
+        case 'SIGINT':
+        case 'completer':
+          return myEmitter.on.apply(myEmitter, arguments)
+      }
+
+      rl.on.apply(myEmitter, arguments)
     },
     _debugModuleSupport: function(debug) {
       debug.log = function log() {
