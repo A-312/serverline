@@ -73,6 +73,12 @@ function Serverline() {
     question: function() {
       rl.question.apply(rl, arguments)
     },
+    getCollection: function() {
+      return {
+        stdout: collection.stdout,
+        stderr: collection.stderr
+      }
+    },
     pause: function() {
       rl.pause()
     },

@@ -264,6 +264,13 @@ Get History.
 Rewrite history.
 
 
+### Serverline.getCollection()
+
+   - Returns: An Object with `stdout` and `stderr` used by serverline.
+
+Use `Serverline.getCollection().stdout.write('msg\n')` can be usefull if you don't want to use `console.log('msg')`. `Serverline.getCollection().stdout` is different of `process.stdout`. Prefere to use `Serverline.getCollection().stdout.write('msg\n')` instead `process.stdout.write('msg\n')` because if you use `process.stdout.write`, you will get some prompt displays bugs.
+
+
 ### Serverline.close()
 
 Close the `readline.Interface` instance and relinquishe control over the `input` and `output` streams. When called, the `'close'` event will be emitted.

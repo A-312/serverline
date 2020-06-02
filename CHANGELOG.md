@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [1.5.0] - 2020-06-02
+### Added
+
+ - Add `serverline.getCollection()` will return { stdout, stderr }. #27
+
+
 ## [1.4.2] - 2019-08-28
 ### Fixed
 
