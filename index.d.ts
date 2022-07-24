@@ -2,7 +2,13 @@ import * as stream from "stream"
 import * as rl from "readline"
 
 declare module "serverline" {
-	export function init(options: string): void
+	export function init(options?: {
+		prompt?: string,
+		ignoreErrors?: boolean,
+		colorMode?: boolean | string,
+		inspectOptions?: object,
+		forceTerminalContext?: boolean,
+	} | string): void
 	export function secret(query: string, callback: () => {}): void
 	export function question(): void
 	export function getPrompt(): string
