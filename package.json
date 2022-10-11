@@ -22,11 +22,13 @@
     "type": "git",
     "url": "git+https://github.com/A-312/serverline.git"
   },
+  "types": "index.d.ts",
   "files": [
     "bin/",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE"
+    "LICENSE",
+    "index.d.ts"
   ],
   "author": "A-312",
   "license": "MIT",
